@@ -1,5 +1,5 @@
-index_cons_close <- function(index_name="000300", from_date="20220101", 
-                             to_date="20230101", website=c("sina", "oriental")){
+index_cons_close <- function(index_name="000016", from_date="20220101", 
+                       to_date="20230101", website=c("sina", "oriental")){
   ak <- reticulate::import("akshare") 
   index <- ak$index_zh_a_hist(index_name, start_date=from_date, end_date=to_date)
   cons <- ak$index_stock_cons_sina(index_name)  
@@ -35,13 +35,15 @@ index_cons_close <- function(index_name="000300", from_date="20220101",
   
   if(website=="sina"){
     for (j in 1:cons_num) {
-      datej <- as.Date(cdata[[j]]$date, tryFormats ="%Y-%m-%d")
+      # datej <- as.Date(cdata[[j]]$date, tryFormats ="%Y-%m-%d")
+      datej <- do.call(c, cdata[[j]]$date)
       dataj <- data.frame(date=datej, closej=cdata[[j]]$close)
       stock_data <- dplyr::left_join(stock_data, dataj, by="date")
     }
   }else{
     for (j in 1:cons_num) {
-      datej <- as.Date(cdata[[j]]$日期, tryFormats ="%Y-%m-%d")
+      # datej <- as.Date(cdata[[j]]$日期, tryFormats ="%Y-%m-%d")
+      datej <- do.call(c, cdata[[j]]$日期)
       dataj <- data.frame(date=datej, closej=cdata[[j]]$收盘)
       stock_data <- dplyr::left_join(stock_data, dataj, by="date")
     }
@@ -58,14 +60,15 @@ index_cons_close <- function(index_name="000300", from_date="20220101",
   }
   
   stock_data
-  
+
 }
 
-
-
 ##Example
-index_name <- ak$index_stock_info()                  
+library(reticulate)
+ak <- import("akshare") 
+index_name <- ak$index_stock_info()     
 index_name
-stock_data <- index_cons_close(index_name="000016", from_date="20220101", 
-                                to_date="20230301", website="sina")
+stock_data <- index_cons_close(index_name="000300", from_date="20220101", 
+                                to_date="20230920", website="oriental")
 
+stock_data
