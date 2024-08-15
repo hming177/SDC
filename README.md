@@ -7,8 +7,8 @@ In R software, the "." in the concatenation function in python needs to be repla
 ###Open Rstudio as administrator
 library(reticulate) 
 install_miniconda() ## Install miniconda environment for python
-miniconda_path()   
-# miniconda_update()
+miniconda_path()  
+
 conda_create("r-reticulate") ## Create an r-reticulate environment
 use_condaenv("r-reticulate")
 py_install("akshare", pip=TRUE) ## Install akshare package using pip
